@@ -1,30 +1,50 @@
-import { Server as HttpServer } from "http";
-import { Server } from "https";
-import { HydraDecoder, HydraEncoder } from "mvs-dump";
 import { WebSocket, WebSocketServer } from "ws";
-import { logger } from "./config/logger";
+import { MVSHTTPServer } from "./server";
+import { randomUUID } from "crypto";
+import { HydraDecoder, HydraEncoder } from "mvs-dump";
+import { buffer } from "stream/consumers";
+import { decodeToken } from "./middleware/auth";
+import { AccountToken } from "./handlers";
 import {
   ALL_PERKS_LOCKED_CHANNEL,
-  GAME_SERVER_INSTANCE_READY_CHANNEL,
   initRedisSubscriber,
   MATCH_FOUND_NOTIFICATION,
-  MATCHMAKING_COMPLETE_CHANNEL,
   ON_GAMEPLAY_CONFIG_NOTIFIED_CHANNEL,
+  GAME_SERVER_INSTANCE_READY_CHANNEL,
   ON_MATCH_MAKER_STARTED_CHANNEL,
   ON_MATCH_MAKER_STARTED_NOTIFICATION,
-  RedisAllPerksLockedNotification,
-  redisClearPlayer,
-  RedisClient,
-  RedisGameServerInstanceReadyNotification,
-  redisGetAllPlayersEquippedComsetics,
+  redisClient,
   redisGetPlayerPerk,
+  RedisPlayerConfig,
+  RedisGameServerInstanceReadyNotification,
+  RedisClient,
+  redisGetAllPlayersEquippedComsetics,
   redisGetPlayers,
+  RedisAllPerksLockedNotification,
+  MATCHMAKING_COMPLETE_CHANNEL,
   RedisMatchMakingCompleteNotification,
+  redisDeletePlayerKeys,
+  redisPushTicketToQueue,
+  redisUpdatePlayerStatus,
+  redisOnMatchMakerStarted,
+  redisPopMatchTicketsFromQueue,
+  ON_LOBBY_MODE_UPDATED,
+  RedisOnGameModeUpdatedNotification as RedisOnLobbyModeUpdatedNotification,
+  ON_CANCEL_MATCHMAKING,
+  RedisCancelMatchMakingNotification,
+  ON_END_OF_MATCH,
+  RedisMatchEndNotification,
+  ON_FORCE_MATCH,
 } from "./config/redis";
+import { Server } from "https";
+import { Server as HttpServer } from "http";
 import { GAME_SERVER_PORT } from "./game/udp";
-import { AccountToken } from "./handlers";
-import { decodeToken } from "./middleware/auth";
+import { logger } from "./config/logger";
 import { MVSTime } from "./utils/date";
+import ObjectID from "bson-objectid";
+import { RedisClientType } from "@redis/client";
+import env from "./env/env";
+import { number } from "zod/v4";
 
 export class WebSocketPlayer {
   init: boolean = false;
@@ -33,12 +53,16 @@ export class WebSocketPlayer {
   account: AccountToken | undefined;
   matchTick: NodeJS.Timeout | undefined;
   matchConfig?: GameNotification;
+  ticket?: ON_MATCH_MAKER_STARTED_NOTIFICATION;
+  ip: string;
 
-  constructor(_ws: WebSocket) {
+  constructor(_ws: WebSocket, ip: string) {
+    this.ip = ip;
+    console.log(ip);
     this.ws = _ws;
   }
 
-  send(data: object) {
+  send(data: Object) {
     const encoder = new HydraEncoder(true);
     encoder.encodeValue(data);
     if (!this.deleted) {
@@ -168,7 +192,7 @@ export class WebSocketService {
   handleHandshake(playerWS: WebSocketPlayer, message: Buffer) {
     const decodedBody = parseInitHydraWebsocketMessage(message);
     // Send ID, hard coded for now
-    const buffer = Buffer.from([
+    let buffer = Buffer.from([
       0x09, 0x01, 0x00, 0x24, 0x39, 0x35, 0x34, 0x65, 0x37, 0x37, 0x36, 0x30, 0x2d, 0x35, 0x33, 0x39, 0x62, 0x2d, 0x34, 0x33, 0x36, 0x63, 0x2d, 0x61,
       0x35, 0x37, 0x64, 0x2d, 0x62, 0x35, 0x36, 0x32, 0x33, 0x66, 0x36, 0x37, 0x61, 0x37, 0x34, 0x64,
     ]);
@@ -190,17 +214,29 @@ export class WebSocketService {
   handleDisconnect(playerWS: WebSocketPlayer) {
     if (playerWS && playerWS.account) {
       playerWS.deleted = true;
-      this.clients.delete(playerWS.account.id);
       this.stopMatchTick(playerWS);
-      redisClearPlayer(playerWS.account.id);
+      this.attemptRemoveMatchTicket(playerWS);
+      this.clients.delete(playerWS.account.id);
+      redisDeletePlayerKeys(playerWS.account.id);
       console.log(`Player ${playerWS.account.id} disconnected from websocket`);
+    }
+  }
+
+  attemptRemoveMatchTicket(playerWS: WebSocketPlayer) {
+    if (playerWS.ticket) {
+      redisPopMatchTicketsFromQueue("1v1", [playerWS.ticket]);
+      redisPopMatchTicketsFromQueue("2v2", [playerWS.ticket]);
+      redisPopMatchTicketsFromQueue("FFA", [playerWS.ticket]);
+      redisPopMatchTicketsFromQueue("casual", [playerWS.ticket]);
     }
   }
 
   setupSocketHandlers() {
     this.ws.on("connection", (ws, request) => {
       console.log("Client connected");
-      const playerWS = new WebSocketPlayer(ws);
+      let ip = request.socket.remoteAddress!.replace(/^::ffff:/, "");
+
+      const playerWS = new WebSocketPlayer(ws, ip!);
       ws.on("message", (message) => {
         if (!playerWS.init) {
           if (Buffer.isBuffer(message)) {
@@ -223,14 +259,17 @@ export class WebSocketService {
 
   stopMatchTick(player: WebSocketPlayer) {
     if (player.matchTick) {
+      logger.info(`Stopping matchtick for ${player.account?.id}`);
       clearInterval(player.matchTick);
+      player.matchTick = undefined;
     }
   }
 
-  handlePartyQueued(notification: ON_MATCH_MAKER_STARTED_NOTIFICATION) {
-    for (const playerId of notification.playerIds) {
-      const client = this.clients.get(playerId);
+  async handlePartyQueued(notification: ON_MATCH_MAKER_STARTED_NOTIFICATION) {
+    for (const player of notification.players) {
+      const client = this.clients.get(player.id);
       if (client) {
+        await redisUpdatePlayerStatus(player.id, "queued");
         client.send({
           data: {
             template_id: "OnMatchmakerStarted",
@@ -245,13 +284,16 @@ export class WebSocketService {
           header: "",
           cmd: "update",
         });
+        client.ticket = notification;
         this.handleMatchTick(client, notification);
       }
     }
+    // Add ticket to the matchmaking queue
+    await redisPushTicketToQueue(notification.matchType, notification);
   }
 
   handleMatchTick(client: WebSocketPlayer, notification: ON_MATCH_MAKER_STARTED_NOTIFICATION) {
-    setInterval(() => {
+    client.matchTick = setInterval(() => {
       client.send({
         data: {},
         payload: {
@@ -262,20 +304,46 @@ export class WebSocketService {
         cmd: "matchmaking-tick",
       });
     }, 1000);
+
+    setTimeout(() => {
+      this.cancelMatchMaking(client, notification.matchmakingRequestId);
+    }, 100_000);
+  }
+
+  cancelMatchMaking(client: WebSocketPlayer, matchmakingRequestId: string) {
+    if (client.matchTick) {
+      const message = {
+        data: {},
+        payload: {
+          id: matchmakingRequestId,
+          state: 3,
+        },
+        header: "Matchmaking request cancelled.",
+        cmd: "matchmaking-cancel",
+      };
+      this.attemptRemoveMatchTicket(client);
+      clearInterval(client.matchTick);
+      client.matchTick = undefined;
+      client.send(message);
+      logger.trace(`Canceling matchmaking - ${client.account?.id}`);
+    }
   }
 
   handleMatchFound(notification: MATCH_FOUND_NOTIFICATION) {
+    const arr = [env.UDP_SERVER_IP, env.UDP_SERVER_IP2];
+    const randomIndex = Math.floor(Math.random() * arr.length);
     for (const matchPlayer of notification.players) {
       const player = this.clients.get(matchPlayer.playerId);
       if (player) {
         this.stopMatchTick(player);
+        console.log(player);
         const message = {
           data: {
             MatchKey: notification.matchKey,
             MatchID: notification.matchId,
             Port: GAME_SERVER_PORT,
             template_id: "GameServerReadyNotification",
-            IPAddress: "127.0.0.1",
+            IPAddress: player.ip === "127.0.0.1" ? "127.0.0.1" : arr[randomIndex],
           },
           payload: {
             match: {
@@ -286,6 +354,7 @@ export class WebSocketService {
           header: "",
           cmd: "update",
         };
+        console.log(player.account?.id, message);
         player.send(message);
         logger.info(`Sent match notification to player ${matchPlayer.playerId} for match ${notification.matchId}`);
       }
@@ -293,9 +362,32 @@ export class WebSocketService {
     this.handleSendGamePlayConfig(notification);
   }
 
+  getNumRingouts(notification: MATCH_FOUND_NOTIFICATION) {
+    if (notification.mode == "1v1") {
+      return 3;
+    }
+    if (notification.mode == "2v2") {
+      return 4;
+    }
+    if (notification.mode == "FFA") {
+      return 4;
+    }
+    if (notification.mode == "casual") {
+      return 1;
+    }
+    return 3;
+  }
+
+  getMatchTime(notification: MATCH_FOUND_NOTIFICATION) {
+    if (notification.mode == "casual") {
+      return 60;
+    }
+    return 420;
+  }
+
   async handleSendGamePlayConfig(notification: MATCH_FOUND_NOTIFICATION) {
-    const MatchTime = 420;
-    const NumRingouts = 3;
+    const MatchTime = this.getMatchTime(notification);
+    const NumRingouts = this.getNumRingouts(notification);
 
     // Get the player configs from redis
     const playerIds = notification.players.map((p) => p.playerId);
@@ -310,6 +402,11 @@ export class WebSocketService {
       const player = notification.players[i];
       const playerConfig = playerConfigs[i];
       const playerLoadout = playerLoadouts[i];
+      console.log(
+        `Player ${player.playerId} ${player.playerIndex} 
+        selected ${playerLoadout.character} 
+        | ${playerLoadout.gameplayPreferences}`
+      );
       Players[player.playerId] = {
         AccountId: player.playerId,
         Taunts: playerConfig.Taunts[playerLoadout.character].TauntSlots,
@@ -317,22 +414,21 @@ export class WebSocketService {
         bAutoPartyPreference: true,
         Gems: [],
         PartyMember: null,
-        GameplayPreferences: 964,
+        GameplayPreferences: Number(playerLoadout.gameplayPreferences),
         BotDifficultyMax: 0,
         bIsBot: false,
         RankedDivision: null,
         bUseCharacterDisplayName: false,
         StartingDamage: 0,
         TeamIndex: player.teamIndex,
-        ProfileIcon: "",
+        ProfileIcon: playerLoadouts[i].profileIcon,
         WinStreak: null,
         RankedTier: null,
         Handicap: 0,
         RingoutVfx: playerConfig.RingoutVfx,
         Character: playerLoadout.character,
         Banner: playerConfig.Banner,
-        // TODO: We should get this from database?
-        StatTrackers: playerConfig.StatTrackers.StatTrackerSlots.map((s) => [s, 1]),
+        StatTrackers: playerConfig.StatTrackers.StatTrackerSlots.map((s) => [s, 1]), // TODO: We should get this from database?
         Perks: [],
         PlayerIndex: player.playerIndex,
         PartyId: player.partyId,
@@ -341,9 +437,49 @@ export class WebSocketService {
         Skin: playerLoadout.skin,
         BotDifficultyMin: 0,
       };
+      if (notification.mode == "casual"){ //ADD ENEMY BOT
+        Players['bot0'] = {
+          AccountId: '0',
+          Taunts: [ '', '', '', '' ],   
+          BotBehaviorOverride: '',
+          bAutoPartyPreference: true,
+          Gems: [],
+          PartyMember: null,
+          GameplayPreferences: 544,
+          BotDifficultyMax: 0,
+          bIsBot: true,
+          RankedDivision: null,
+          bUseCharacterDisplayName: true,
+          StartingDamage: 0,
+          TeamIndex: 1,
+          ProfileIcon: '',        
+          WinStreak: null,
+          RankedTier: null,
+          Handicap: 0,
+          RingoutVfx: '',
+          Character: "character_shaggy",
+          Banner: '',
+          StatTrackers: [],
+          Perks: [],
+          PlayerIndex: 1,
+          PartyId: '',
+          Username: {},
+          Buffs: [],
+          Skin: "skin_shaggy_default",
+          BotDifficultyMin: 5
+        };
+      }
     }
 
-    console.log(Players);
+    let match_config:any = {
+      bIsPvP: true,
+      bIsRift: false,
+    }
+
+    if (notification.mode == "casual"){
+      match_config.bIsPvP = false;
+      match_config.bIsRift = true;
+    }
 
     // Create the message to send to the players
     const message: GameNotification = {
@@ -353,7 +489,7 @@ export class WebSocketService {
           ArenaModeInfo: null,
           RiftNodeId: "",
           ScoreEvaluationRule: "TargetScoreIsWin",
-          bIsPvP: true,
+          bIsPvP: match_config.bIsPvP,
           ScoreAttributionRule: "AttributeToAttacker",
           MatchDurationSeconds: MatchTime,
           Created: {
@@ -367,8 +503,8 @@ export class WebSocketService {
           bIsCustomGame: false,
           Players,
           CustomGameSettings: {
-            bHazardsEnabled: true,
-            bShieldsEnabled: true,
+            bHazardsEnabled: false,
+            bShieldsEnabled: false,
             MatchTime,
             NumRingouts,
           },
@@ -378,7 +514,7 @@ export class WebSocketService {
             bDisplayTimer: true,
           },
           bIsCasualSpecial: false,
-          bAllowMapHazards: true,
+          bAllowMapHazards: false,
           RiftNodeAttunement: "Attunements:None",
           CountdownDisplay: "CountdownTypes:XvY",
           Cluster: "ec2-us-east-1-dokken",
@@ -388,7 +524,7 @@ export class WebSocketService {
           bIsOnlineMatch: true,
           ModeString: notification.mode,
           Map: notification.map,
-          bIsRift: false,
+          bIsRift: match_config.bIsRift,
         },
         template_id: "OnGameplayConfigNotified",
       },
@@ -411,6 +547,7 @@ export class WebSocketService {
         logger.info(`Sent gameplay config to player ${client.account?.id} for match ${notification.matchId}`);
       }
     }
+    //console.log("game start?",message.data.GameplayConfig.Players);
   }
 
   async handleAllPerksLocked(notification: RedisAllPerksLockedNotification) {
@@ -457,7 +594,92 @@ export class WebSocketService {
         cmd: "game-server-instance-ready",
       };
       if (client) {
+        logger.info(`Sent game server instance ready to player ${playerId} for match ${notification.containerMatchId}`);
         client.send(message);
+      } else {
+        logger.error(`Could not find player ${playerId} to send game server instance ready message for match ${notification.containerMatchId}`);
+      }
+    }
+  }
+
+  handleOnLobbyModeChanged(notification: RedisOnLobbyModeUpdatedNotification) {
+    for (const playerId of notification.playersIds) {
+      const client = this.clients.get(playerId);
+      const message = {
+        data: {
+          template_id: "OnLobbyModeUpdated",
+          LobbyId: notification.lobbyId,
+          ModeString: notification.modeString,
+        },
+        payload: {
+          custom_notification: "realtime",
+        },
+        header: "",
+        cmd: "update",
+      };
+      if (client) {
+        logger.trace(`OnLobbyModeUpdated send to ${playerId}`);
+        client.send(message);
+      }
+    }
+  }
+
+  handleCancelMatchMaking(notification: RedisCancelMatchMakingNotification) {
+    for (const playerId of notification.playersIds) {
+      const client = this.clients.get(playerId);
+
+      if (client) {
+        this.cancelMatchMaking(client, notification.matchmakingId);
+      }
+    }
+  }
+
+  handleOnMatchEnd(notification: RedisMatchEndNotification) {
+    for (const playerId of notification.playersIds) {
+      const client = this.clients.get(playerId);
+
+      if (client) {
+        const data = {
+          data: {
+            GameplayConfig: client.matchConfig?.data.GameplayConfig,
+            template_id: "EndOfMatchPayload",
+            ClientReturnData: {},
+          },
+          payload: {
+            frm: {
+              id: "internal-server",
+              type: "server-api-key",
+            },
+            template: "realtime",
+            account_id: playerId,
+            profile_id: playerId,
+          },
+          header: "",
+          cmd: "profile-notification",
+        };
+        console.log("END OF MATCH WS", data);
+        client.send(data);
+        setTimeout(() => {
+          const data = {
+            data: {
+              AccountId: playerId,
+              MatchId: notification.matchId,
+              template_id: "RematchDeclinedNotification",
+            },
+            payload: {
+              frm: {
+                id: "internal-server",
+                type: "server-api-key",
+              },
+              template: "realtime",
+              account_id: playerId,
+              profile_id: playerId,
+            },
+            header: "",
+            cmd: "profile-notification",
+          };
+          client.send(data);
+        }, 1000);
       }
     }
   }
@@ -486,6 +708,15 @@ export class WebSocketService {
     }
   }
 
+  forceMatch(notification:any){
+    // Send the message to each player in the match
+    const client = this.clients.get(notification.accountID);
+    if (client) {
+      client.send(notification.message);
+      client.matchConfig = notification.message;
+    }
+  }
+  
   private setupRedisSubscription() {
     // Subscribe to channels
     this.redisSub.subscribe(ON_GAMEPLAY_CONFIG_NOTIFIED_CHANNEL, (message) => {
@@ -511,6 +742,26 @@ export class WebSocketService {
     this.redisSub.subscribe(MATCHMAKING_COMPLETE_CHANNEL, (message) => {
       const notification = JSON.parse(message) as RedisMatchMakingCompleteNotification;
       this.handleMatchMakingComplete(notification);
+    });
+
+    this.redisSub.subscribe(ON_LOBBY_MODE_UPDATED, (message) => {
+      const notification = JSON.parse(message) as RedisOnLobbyModeUpdatedNotification;
+      this.handleOnLobbyModeChanged(notification);
+    });
+
+    this.redisSub.subscribe(ON_CANCEL_MATCHMAKING, (message) => {
+      const notification = JSON.parse(message) as RedisCancelMatchMakingNotification;
+      this.handleCancelMatchMaking(notification);
+    });
+
+    this.redisSub.subscribe(ON_END_OF_MATCH, (message) => {
+      const notification = JSON.parse(message) as RedisMatchEndNotification;
+      this.handleOnMatchEnd(notification);
+    });
+
+    this.redisSub.subscribe(ON_FORCE_MATCH, (message) => {
+      const notification = JSON.parse(message) as any;
+      this.forceMatch(notification);
     });
   }
 }

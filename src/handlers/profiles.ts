@@ -1,106 +1,47 @@
-import { Player, playerModel } from "../database/Player";
-import { z } from "zod";
-import { StatusCodes } from "http-status-codes";
-import { Request, Response } from "express";
-import { MVSResponses } from "../interfaces/responses_types";
-import { MVSRequests } from "../interfaces/requests_types";
+import express, { Request, Response } from "express";
+import { MVSQueries } from "../interfaces/queries_types";
+import { GleamiumData } from "../data/gleamium";
+import { unlockAll, unlockAllCharacters } from "../data/characters";
+import { getProfileForMatch } from "../services/profileService";
 
-const PutProfilesRequest = z.object({
-  ids: z.array(z.string()),
-});
-const PutProfilesQueryParams = z.object({
-  account_fields: z.union([z.array(z.string()), z.string()]).optional(),
-  partial_response: z.number().optional(),
-});
+export async function handleProfiles_id_inventory(req: Request<{}, {}, {}, MVSQueries.Profiles_id_inventory_QUERY>, res: Response) {
+  const account = req.token;
+  res.send([...unlockAll(account.id), GleamiumData]);
+}
 
-export async function handleProfiles_bulk(
-  req: Request<{}, MVSResponses.Profiles_bulk_RESPONSE, MVSRequests.Profiles_bulk_REQUEST, {}>,
-  res: Response<MVSResponses.Profiles_bulk_RESPONSE[]>,
-) {
-  let includeAccount = false;
-
-  const playersDB: Player[] = [];
-  let requestBody;
-  {
-    const parseQueryFields = PutProfilesRequest.safeParse(req.body);
-    if (!parseQueryFields.success) {
-      res.sendStatus(StatusCodes.BAD_REQUEST);
-      return;
-    }
-    requestBody = parseQueryFields.data;
-  }
-
-  let queryFields;
-  {
-    const parseQueryFields = PutProfilesQueryParams.safeParse(req.query);
-    if (!parseQueryFields.success) {
-      res.sendStatus(StatusCodes.BAD_REQUEST);
-      return;
-    }
-    queryFields = parseQueryFields.data;
-  }
-
-  const includeFields = new Set([
-    "inventory",
-    "points",
-    "account_id",
-    "matches",
-    "user_segments",
-    "random_distribution",
-    "last_login",
-    "created_at",
-    "account_id",
-    "updated_at",
-    "id",
-  ]);
-
-  const selectSettings: Record<string, number> = {};
-  for (const includeField of includeFields) {
-    selectSettings[includeField] = 1;
-  }
-  if (queryFields.account_fields != null) {
-    if (!Array.isArray(queryFields.account_fields)) {
-      queryFields.account_fields = Array(queryFields.account_fields);
-    }
-    for (const queryField of queryFields.account_fields) {
-      selectSettings[queryField] = 1;
-      if (queryField == "presence") {
-        includeAccount = true;
+export async function handleProfiles_bulk(req: Request<{}, {}, { ids: string[] }, MVSQueries.Profiles_bulk_QUERY>, res: Response) {
+  const account = req.token;
+  if (req.query.account_fields) {
+    const ids = req.body.ids;
+    let response = [];
+    for (let id of ids) {
+      const profile = await getProfileForMatch(id);
+      if (profile) {
+        response.push(profile);
       }
     }
+    res.send(response);
+    return;
   }
-
-  let playersQuery = playerModel.find({}, selectSettings).where("account_id").in(requestBody.ids);
-
-  if (includeAccount) {
-    playersQuery = playersQuery.populate("account");
-  }
-  const players = await playersQuery.lean().exec();
-  const mapAccountIdToPlayer: Map<string, (typeof players)[0]> = new Map();
-  players.map((doc) => {
-    mapAccountIdToPlayer.set(doc.account_id, doc);
-  });
-  for (const accountId of requestBody.ids) {
-    const player = mapAccountIdToPlayer.get(accountId);
-    if (player != undefined) {
-      playersDB.push(Player.flatten(player));
-    }
-  }
-
-  const response = playersDB.map((player) => {
-    const res: MVSResponses.Profiles_bulk_RESPONSE = {
-      id: player.id,
-      account_id: player.account_id,
-      created_at: new Date(player.created_at).toISOString(),
-      updated_at: new Date(player.updated_at).toISOString(),
-      last_login: new Date(player.last_login).toISOString(),
-      random_distribution: player.random_distribution,
-      user_segments: player.user_segments,
-      points: player.points,
-      account: player.account,
-    };
-    return res;
-  });
-
-  res.send(response);
+  console.log("OTHER_PROFILE");
+  res.send([
+    {
+      updated_at: {
+        _hydra_unix_date: 1738953155,
+      },
+      account_id: "62dadd1a57a63708ed1caccb",
+      created_at: {
+        _hydra_unix_date: 1658510618,
+      },
+      last_login: {
+        _hydra_unix_date: 1738799392,
+      },
+      points: null,
+      "server_data.SeasonalData.Season:SeasonTwo.Ranked.bEndOfSeasonRewardsGranted": true,
+      user_segments: [
+      ],
+      random_distribution: 0.09829278289973609,
+      id: account.id,
+    },
+  ]);
 }

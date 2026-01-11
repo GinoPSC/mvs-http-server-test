@@ -14,8 +14,9 @@ import { MessageType as ServerMessageType, parseUdpServerMessage, Header as Serv
 import { serializeServerMessage } from "./serializer";
 import { compressPacket, decompressPacket } from "./compression";
 import chalk from "chalk";
+import env from "../env/env";
 
-export const GAME_SERVER_PORT = 41234;
+export const GAME_SERVER_PORT = env.UDP_PORT;
 
 const regex = /(.{2})(?=.+)/g;
 
@@ -39,7 +40,7 @@ function logPacket(data: Buffer | null, type: string, direction: "RECV" | "SEND"
       chalk.yellow(direction),
       chalk.yellow(type),
       chalk.blue(formatTime(new Date())),
-      data ? chalk.yellow(space2(data.toString("hex"))) : "",
+      data ? chalk.yellow(space2(data.toString("hex"))) : ""
     );
   }
   if (json) {
@@ -109,10 +110,7 @@ export class RollbackServer {
   public matches = new Map<string, MatchState>();
   private players: PlayerInfo[] = [];
 
-  constructor(
-    private port = GAME_SERVER_PORT,
-    private maxPlayers = 2,
-  ) {
+  constructor(private port = GAME_SERVER_PORT, private maxPlayers = 2) {
     this.socket.on("message", (msg, rinfo) => this.onMessage(msg, rinfo));
     this.socket.bind(this.port, () => {
       console.log(`Rollback server listening on UDP ${this.port}`);
@@ -385,8 +383,8 @@ export class RollbackServer {
     const expectedClientFrame = preciseServerFrame - pingInFrames / 2;
     const newRift = clientFrame - expectedClientFrame + 5;
 
-    const rift = clientFrame + ping / TARGET_FRAME_TIME / 2 - serverFrame;
-    console.log("rift", newRift, "serverFrame", serverFrame, "ping", ping, "lastTickDuration", lastTickDuration, "FRAME_ADV", rift);
+    const rift = (clientFrame  + (ping / TARGET_FRAME_TIME/2)) - serverFrame;
+    console.log("rift", newRift, "serverFrame", serverFrame, "ping", ping, "lastTickDuration", lastTickDuration, "FRAME_ADV",rift);
     return newRift;
   }
 
@@ -513,7 +511,7 @@ export class RollbackServer {
       const buf = serializeServerMessage(
         header,
         data,
-        this.maxPlayers, // pass in your configured player count
+        this.maxPlayers // pass in your configured player count
       );
       const compressBuf = compressPacket(buf);
       logPacket(compressBuf, ServerMessageType[type], "SEND", data);

@@ -1,18 +1,38 @@
-import { redisGetPlayer, RedisMatchTicket, redisOnMatchMakerStarted, redisPushTicketToQueue, redisUpdatePlayerStatus } from "../config/redis";
+import {
+  ON_CANCEL_MATCHMAKING,
+  ON_MATCH_MAKER_STARTED_CHANNEL,
+  ON_MATCH_MAKER_STARTED_NOTIFICATION,
+  RedisCancelMatchMakingNotification,
+  redisClient,
+  redisGetPlayer,
+  RedisMatchTicket,
+  redisOnMatchMakerStarted,
+  redisPushTicketToQueue,
+  redisUpdatePlayerStatus,
+} from "../config/redis";
 import { logger } from "../config/logger";
 import { MVSTime } from "../utils/date";
 
 export enum MATCH_TYPES {
   ONE_V_ONE = "1v1",
   TWO_V_TWO = "2v2",
-  FFA = "FFA",
+  FREE_FOR_ALL = "FFA",
+  CASUAL = "casual",
 }
 
-export async function queueMatch(playerIds: string[], partyId: string, matchmakingRequestId: string, matchType: MATCH_TYPES): Promise<void> {
+export async function queueMatch(
+  partyLeaderId: string,
+  playerIds: string[],
+  partyId: string,
+  matchmakingRequestId: string,
+  matchType: MATCH_TYPES
+): Promise<void> {
   try {
     // Create a match ticket
-    const ticket: RedisMatchTicket = {
+    const ticket: ON_MATCH_MAKER_STARTED_NOTIFICATION = {
       created_at: MVSTime(new Date()),
+      matchType,
+      partyLeaderId,
       matchmakingRequestId,
       partyId,
       party_size: playerIds.length,
@@ -25,24 +45,27 @@ export async function queueMatch(playerIds: string[], partyId: string, matchmaki
             skill: 0,
             ip: playerConfig.ip,
           };
-        }),
+        })
       ),
     };
-
-    // Add ticket to the matchmaking queue
-    await redisPushTicketToQueue(matchType, ticket);
-
-    // Update player status
-    for (const playerId of playerIds) {
-      await redisUpdatePlayerStatus(playerId, "queued");
-    }
-
     // Publish a message that a party has been queued
-    await redisOnMatchMakerStarted(matchmakingRequestId, partyId, playerIds);
+    await redisOnMatchMakerStarted(ticket);
 
-    logger.info(`Party (${partyId}) has been added to ${matchType} matchmaking queue. Players (${playerIds.join(",")})`);
+    logger.info(
+      `Party (${partyId}) matchmakingRequestId(${matchmakingRequestId}) has been added to ${matchType} matchmaking queue. Players (${playerIds.join(
+        ","
+      )})`
+    );
   } catch (error) {
     logger.error(`Error queueing player: ${error}`);
     throw error;
   }
+}
+
+export async function cancelMatchmaking(accountId: string, matchmakingId: string) {
+  const notification: RedisCancelMatchMakingNotification = {
+    playersIds: [accountId],
+    matchmakingId,
+  };
+  await redisClient.publish(ON_CANCEL_MATCHMAKING, JSON.stringify(notification));
 }

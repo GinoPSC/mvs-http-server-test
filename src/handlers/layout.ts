@@ -3,7 +3,7 @@ import { MVSQueries } from "../interfaces/queries_types";
 
 export async function handleLayout_dokken_layout_type_personalized_account_cosmetics_variant_id(
   req: Request<{}, {}, {}, MVSQueries.Layout_dokken_layout_type_personalized_account_cosmetics_variant_id_QUERY>,
-  res: Response,
+  res: Response
 ) {
   res.send({
     slug: "account-cosmetics-layout",
@@ -3842,10 +3842,7 @@ export async function handleLayout_dokken_layout_type_personalized_account_cosme
                       type_options: { text: { localizations: { "store_product-shaggy-profile-icon-account-cosmetics-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
                       data: {
-                        Value: [
-                          { localizations: { "epic-profile-icon": "Epic Profile Icon" } },
-                          { localizations: { "scooby-doo-": "Scooby-Doo™" } },
-                        ],
+                        Value: [{ localizations: { "epic-profile-icon": "Epic Profile Icon" } }, { localizations: { "scooby-doo-": "Scooby-Doo™" } }],
                       },
                     },
                     {
@@ -4495,10 +4492,7 @@ export async function handleLayout_dokken_layout_type_personalized_account_cosme
                       type_options: { text: { localizations: { "store_product-hurt-toe-account-cosmetics-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
                       data: {
-                        Value: [
-                          { localizations: { "rare-taunt-emote": "Rare Taunt Emote" } },
-                          { localizations: { "tom---jerry-": "Tom & Jerry™" } },
-                        ],
+                        Value: [{ localizations: { "rare-taunt-emote": "Rare Taunt Emote" } }, { localizations: { "tom---jerry-": "Tom & Jerry™" } }],
                       },
                     },
                     {
@@ -5256,10 +5250,7 @@ export async function handleLayout_dokken_layout_type_personalized_account_cosme
                       type_options: { text: { localizations: { "store_product-space-kook-profile-icon-account-cosmetics-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
                       data: {
-                        Value: [
-                          { localizations: { "rare-profile-icon": "Rare Profile Icon" } },
-                          { localizations: { "scooby-doo-": "Scooby-Doo™" } },
-                        ],
+                        Value: [{ localizations: { "rare-profile-icon": "Rare Profile Icon" } }, { localizations: { "scooby-doo-": "Scooby-Doo™" } }],
                       },
                     },
                     {
@@ -5577,10 +5568,7 @@ export async function handleLayout_dokken_layout_type_personalized_account_cosme
                       type_options: { text: { localizations: { "store_product-mystery-machine-account-cosmetics-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
                       data: {
-                        Value: [
-                          { localizations: { "epic-profile-icon": "Epic Profile Icon" } },
-                          { localizations: { "scooby-doo-": "Scooby-Doo™" } },
-                        ],
+                        Value: [{ localizations: { "epic-profile-icon": "Epic Profile Icon" } }, { localizations: { "scooby-doo-": "Scooby-Doo™" } }],
                       },
                     },
                     {
@@ -7401,10 +7389,7 @@ export async function handleLayout_dokken_layout_type_personalized_account_cosme
                       type_options: { text: { localizations: { "store_product-scooby-tag-account-cosmetics-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
                       data: {
-                        Value: [
-                          { localizations: { "epic-profile-icon": "Epic Profile Icon" } },
-                          { localizations: { "scooby-doo-": "Scooby-Doo™" } },
-                        ],
+                        Value: [{ localizations: { "epic-profile-icon": "Epic Profile Icon" } }, { localizations: { "scooby-doo-": "Scooby-Doo™" } }],
                       },
                     },
                     {
@@ -10797,9 +10782,7 @@ export async function handleLayout_dokken_layout_type_personalized_account_cosme
                       type: "text",
                       type_options: { text: { localizations: { "store_product-bat-emblem-account-cosmetics-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
-                      data: {
-                        Value: [{ localizations: { "uncommon-profile-icon": "Uncommon Profile Icon" } }, { localizations: { "dc-": "DC™" } }],
-                      },
+                      data: { Value: [{ localizations: { "uncommon-profile-icon": "Uncommon Profile Icon" } }, { localizations: { "dc-": "DC™" } }] },
                     },
                     {
                       name: "AdditionalVisualData",
@@ -11214,9 +11197,7 @@ export async function handleLayout_dokken_layout_type_personalized_account_cosme
                       type: "text",
                       type_options: { text: { localizations: { "store_product-merry-melodies-account-cosmetics-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
-                      data: {
-                        Value: [{ localizations: { "rare-banner": "Rare Banner" } }, { localizations: { "looney-tunes-": "Looney Tunes™" } }],
-                      },
+                      data: { Value: [{ localizations: { "rare-banner": "Rare Banner" } }, { localizations: { "looney-tunes-": "Looney Tunes™" } }] },
                     },
                     {
                       name: "AdditionalVisualData",
@@ -15789,9 +15770,7 @@ export async function handleLayout_dokken_layout_type_personalized_account_cosme
                       type: "text",
                       type_options: { text: { localizations: { "store_product-whats-opera-doc-account-cosmetics-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
-                      data: {
-                        Value: [{ localizations: { "epic-banner": "Epic Banner" } }, { localizations: { "looney-tunes-": "Looney Tunes™" } }],
-                      },
+                      data: { Value: [{ localizations: { "epic-banner": "Epic Banner" } }, { localizations: { "looney-tunes-": "Looney Tunes™" } }] },
                     },
                     {
                       name: "AdditionalVisualData",
@@ -17159,9 +17138,7 @@ export async function handleLayout_dokken_layout_type_personalized_account_cosme
                       type: "text",
                       type_options: { text: { localizations: { "store_product-wabbit-season-account-cosmetics-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
-                      data: {
-                        Value: [{ localizations: { "rare-banner": "Rare Banner" } }, { localizations: { "looney-tunes-": "Looney Tunes™" } }],
-                      },
+                      data: { Value: [{ localizations: { "rare-banner": "Rare Banner" } }, { localizations: { "looney-tunes-": "Looney Tunes™" } }] },
                     },
                     {
                       name: "AdditionalVisualData",
@@ -21162,9 +21139,7 @@ export async function handleLayout_dokken_layout_type_personalized_account_cosme
                       type: "text",
                       type_options: { text: { localizations: { "store_product-spikes-bite-account-cosmetics-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
-                      data: {
-                        Value: [{ localizations: { "epic-ringout": "Epic Ringout" } }, { localizations: { "tom---jerry-": "Tom & Jerry™" } }],
-                      },
+                      data: { Value: [{ localizations: { "epic-ringout": "Epic Ringout" } }, { localizations: { "tom---jerry-": "Tom & Jerry™" } }] },
                     },
                     {
                       name: "AdditionalVisualData",
@@ -21275,10 +21250,7 @@ export async function handleLayout_dokken_layout_type_personalized_account_cosme
                       type_options: { text: { localizations: { "store_product-stevens-lion-account-cosmetics-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
                       data: {
-                        Value: [
-                          { localizations: { "epic-ringout": "Epic Ringout" } },
-                          { localizations: { "steven-universe-": "Steven Universe™" } },
-                        ],
+                        Value: [{ localizations: { "epic-ringout": "Epic Ringout" } }, { localizations: { "steven-universe-": "Steven Universe™" } }],
                       },
                     },
                     {
@@ -21384,10 +21356,7 @@ export async function handleLayout_dokken_layout_type_personalized_account_cosme
                       type_options: { text: { localizations: { "store_product-gem-bubbles-account-cosmetics-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
                       data: {
-                        Value: [
-                          { localizations: { "epic-ringout": "Epic Ringout" } },
-                          { localizations: { "steven-universe-": "Steven Universe™" } },
-                        ],
+                        Value: [{ localizations: { "epic-ringout": "Epic Ringout" } }, { localizations: { "steven-universe-": "Steven Universe™" } }],
                       },
                     },
                     {
@@ -22643,10 +22612,7 @@ export async function handleLayout_dokken_layout_type_personalized_account_cosme
                       type_options: { text: { localizations: { "store_product-house-lannister-sigil-account-cosmetics-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
                       data: {
-                        Value: [
-                          { localizations: { "rare-ringout": "Rare Ringout" } },
-                          { localizations: { "game-of-thrones-": "Game of Thrones™" } },
-                        ],
+                        Value: [{ localizations: { "rare-ringout": "Rare Ringout" } }, { localizations: { "game-of-thrones-": "Game of Thrones™" } }],
                       },
                     },
                     {
@@ -22751,10 +22717,7 @@ export async function handleLayout_dokken_layout_type_personalized_account_cosme
                       type_options: { text: { localizations: { "store_product-house-targaryen-sigil-account-cosmetics-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
                       data: {
-                        Value: [
-                          { localizations: { "rare-ringout": "Rare Ringout" } },
-                          { localizations: { "game-of-thrones-": "Game of Thrones™" } },
-                        ],
+                        Value: [{ localizations: { "rare-ringout": "Rare Ringout" } }, { localizations: { "game-of-thrones-": "Game of Thrones™" } }],
                       },
                     },
                     {
@@ -23375,10 +23338,7 @@ export async function handleLayout_dokken_layout_type_personalized_account_cosme
                       type_options: { text: { localizations: { "store_product-house-stark-sigil-account-cosmetics-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
                       data: {
-                        Value: [
-                          { localizations: { "epic-ringout": "Epic Ringout" } },
-                          { localizations: { "game-of-thrones-": "Game of Thrones™" } },
-                        ],
+                        Value: [{ localizations: { "epic-ringout": "Epic Ringout" } }, { localizations: { "game-of-thrones-": "Game of Thrones™" } }],
                       },
                     },
                     {
@@ -24018,10 +23978,7 @@ export async function handleLayout_dokken_layout_type_personalized_account_cosme
                       type_options: { text: { localizations: { "store_product-obsidian-account-cosmetics-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
                       data: {
-                        Value: [
-                          { localizations: { "epic-ringout": "Epic Ringout" } },
-                          { localizations: { "steven-universe-": "Steven Universe™" } },
-                        ],
+                        Value: [{ localizations: { "epic-ringout": "Epic Ringout" } }, { localizations: { "steven-universe-": "Steven Universe™" } }],
                       },
                     },
                     {
@@ -24127,10 +24084,7 @@ export async function handleLayout_dokken_layout_type_personalized_account_cosme
                       type_options: { text: { localizations: { "store_product-shield-and-bubbles-account-cosmetics-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
                       data: {
-                        Value: [
-                          { localizations: { "epic-ringout": "Epic Ringout" } },
-                          { localizations: { "steven-universe-": "Steven Universe™" } },
-                        ],
+                        Value: [{ localizations: { "epic-ringout": "Epic Ringout" } }, { localizations: { "steven-universe-": "Steven Universe™" } }],
                       },
                     },
                     {
@@ -25305,10 +25259,7 @@ export async function handleLayout_dokken_layout_type_personalized_account_cosme
                       type_options: { text: { localizations: { "store_product-obsidian-account-cosmetic-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
                       data: {
-                        Value: [
-                          { localizations: { "epic-ringout": "Epic Ringout" } },
-                          { localizations: { "steven-universe-": "Steven Universe™" } },
-                        ],
+                        Value: [{ localizations: { "epic-ringout": "Epic Ringout" } }, { localizations: { "steven-universe-": "Steven Universe™" } }],
                       },
                     },
                     {
@@ -25414,10 +25365,7 @@ export async function handleLayout_dokken_layout_type_personalized_account_cosme
                       type_options: { text: { localizations: { "store_product-shield-and-bubbles-account-cosmetic-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
                       data: {
-                        Value: [
-                          { localizations: { "epic-ringout": "Epic Ringout" } },
-                          { localizations: { "steven-universe-": "Steven Universe™" } },
-                        ],
+                        Value: [{ localizations: { "epic-ringout": "Epic Ringout" } }, { localizations: { "steven-universe-": "Steven Universe™" } }],
                       },
                     },
                     {
@@ -26892,10 +26840,7 @@ export async function handleLayout_dokken_layout_type_personalized_account_cosme
                       type_options: { text: { localizations: { "store_product-lebron-ringouts-account-cosmetic-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
                       data: {
-                        Value: [
-                          { localizations: { badge: "Badge" } },
-                          { localizations: { "space-jam--a-new-legacy-": "Space Jam: A New Legacy™" } },
-                        ],
+                        Value: [{ localizations: { badge: "Badge" } }, { localizations: { "space-jam--a-new-legacy-": "Space Jam: A New Legacy™" } }],
                       },
                     },
                     {
@@ -28159,9 +28104,7 @@ export async function handleLayout_dokken_layout_type_personalized_account_cosme
                       type: "text",
                       type_options: { text: { localizations: { "store_product-hole-sweet-hole-account-cosmetic-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
-                      data: {
-                        Value: [{ localizations: { "epic-banner": "Epic Banner" } }, { localizations: { "looney-tunes-": "Looney Tunes™" } }],
-                      },
+                      data: { Value: [{ localizations: { "epic-banner": "Epic Banner" } }, { localizations: { "looney-tunes-": "Looney Tunes™" } }] },
                     },
                     {
                       name: "AdditionalVisualData",
@@ -28374,10 +28317,7 @@ export async function handleLayout_dokken_layout_type_personalized_account_cosme
                       type_options: { text: { localizations: { "store_product-frenemies-of-the-deep-account-cosmetic-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
                       data: {
-                        Value: [
-                          { localizations: { "legendary-banner": "Legendary Banner" } },
-                          { localizations: { "tom---jerry-": "Tom & Jerry™" } },
-                        ],
+                        Value: [{ localizations: { "legendary-banner": "Legendary Banner" } }, { localizations: { "tom---jerry-": "Tom & Jerry™" } }],
                       },
                     },
                     {
@@ -28694,9 +28634,7 @@ export async function handleLayout_dokken_layout_type_personalized_account_cosme
                       type: "text",
                       type_options: { text: { localizations: { "store_product-marvins-wardrobe-account-cosmetic-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
-                      data: {
-                        Value: [{ localizations: { "epic-banner": "Epic Banner" } }, { localizations: { "looney-tunes-": "Looney Tunes™" } }],
-                      },
+                      data: { Value: [{ localizations: { "epic-banner": "Epic Banner" } }, { localizations: { "looney-tunes-": "Looney Tunes™" } }] },
                     },
                     {
                       name: "AdditionalVisualData",
@@ -29124,9 +29062,7 @@ export async function handleLayout_dokken_layout_type_personalized_account_cosme
                       type: "text",
                       type_options: { text: { localizations: { "store_product-shark-teef-account-cosmetic-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
-                      data: {
-                        Value: [{ localizations: { banner: "Banner" } }, { localizations: { "player-first-games-": "Player First Games™" } }],
-                      },
+                      data: { Value: [{ localizations: { banner: "Banner" } }, { localizations: { "player-first-games-": "Player First Games™" } }] },
                     },
                     {
                       name: "AdditionalVisualData",
@@ -33426,10 +33362,7 @@ export async function handleLayout_dokken_layout_type_personalized_account_cosme
                       type_options: { text: { localizations: { "store_product-wildfire-account-cosmetic-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
                       data: {
-                        Value: [
-                          { localizations: { "epic-ringout": "Epic Ringout" } },
-                          { localizations: { "game-of-thrones-": "Game of Thrones™" } },
-                        ],
+                        Value: [{ localizations: { "epic-ringout": "Epic Ringout" } }, { localizations: { "game-of-thrones-": "Game of Thrones™" } }],
                       },
                     },
                     {
@@ -33854,10 +33787,7 @@ export async function handleLayout_dokken_layout_type_personalized_account_cosme
                       type_options: { text: { localizations: { "store_product-slashed-account-cosmetic-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
                       data: {
-                        Value: [
-                          { localizations: { "epic-ringout": "Epic Ringout" } },
-                          { localizations: { "friday-the-13th-": "Friday the 13th™" } },
-                        ],
+                        Value: [{ localizations: { "epic-ringout": "Epic Ringout" } }, { localizations: { "friday-the-13th-": "Friday the 13th™" } }],
                       },
                     },
                     {
@@ -34821,10 +34751,7 @@ export async function handleLayout_dokken_layout_type_personalized_account_cosme
                       type_options: { text: { localizations: { "store_product-dance-of-the-spoons-account-cosmetic-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
                       data: {
-                        Value: [
-                          { localizations: { "legendary-taunt-emote": "Legendary Taunt Emote" } },
-                          { localizations: { "matrix-": "Matrix™" } },
-                        ],
+                        Value: [{ localizations: { "legendary-taunt-emote": "Legendary Taunt Emote" } }, { localizations: { "matrix-": "Matrix™" } }],
                       },
                     },
                     {
@@ -36207,10 +36134,7 @@ export async function handleLayout_dokken_layout_type_personalized_account_cosme
                       type_options: { text: { localizations: { "store_product-tasty-tantrum-account-cosmetic-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
                       data: {
-                        Value: [
-                          { localizations: { "legendary-taunt": "Legendary Taunt" } },
-                          { localizations: { "looney-tunes-": "Looney Tunes™" } },
-                        ],
+                        Value: [{ localizations: { "legendary-taunt": "Legendary Taunt" } }, { localizations: { "looney-tunes-": "Looney Tunes™" } }],
                       },
                     },
                     {
@@ -37267,10 +37191,7 @@ export async function handleLayout_dokken_layout_type_personalized_account_cosme
                       type_options: { text: { localizations: { "store_product-lebron-total-damage-dealt-account-cosmetic-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
                       data: {
-                        Value: [
-                          { localizations: { badge: "Badge" } },
-                          { localizations: { "space-jam--a-new-legacy-": "Space Jam: A New Legacy™" } },
-                        ],
+                        Value: [{ localizations: { badge: "Badge" } }, { localizations: { "space-jam--a-new-legacy-": "Space Jam: A New Legacy™" } }],
                       },
                     },
                     {
@@ -37588,10 +37509,7 @@ export async function handleLayout_dokken_layout_type_personalized_account_cosme
                       type_options: { text: { localizations: { "store_product-downloading-tnjexe-account-cosmetic-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
                       data: {
-                        Value: [
-                          { localizations: { "legendary-banner": "Legendary Banner" } },
-                          { localizations: { "tom---jerry-": "Tom & Jerry™" } },
-                        ],
+                        Value: [{ localizations: { "legendary-banner": "Legendary Banner" } }, { localizations: { "tom---jerry-": "Tom & Jerry™" } }],
                       },
                     },
                     {
@@ -63508,7 +63426,7 @@ export async function handleLayout_dokken_layout_type_personalized_account_cosme
 
 export async function handleLayout_dokken_layout_type_personalized_battlepass_variant_id(
   req: Request<{}, {}, {}, MVSQueries.Layout_dokken_layout_type_personalized_battlepass_variant_id_QUERY>,
-  res: Response,
+  res: Response
 ) {
   res.send({
     code: 400,
@@ -63521,7 +63439,7 @@ export async function handleLayout_dokken_layout_type_personalized_battlepass_va
 
 export async function handleLayout_dokken_layout_type_personalized_currency_variant_id(
   req: Request<{}, {}, {}, MVSQueries.Layout_dokken_layout_type_personalized_currency_variant_id_QUERY>,
-  res: Response,
+  res: Response
 ) {
   res.send({
     slug: "currency-layout",
@@ -63900,7 +63818,7 @@ export async function handleLayout_dokken_layout_type_personalized_currency_vari
 
 export async function handleLayout_dokken_layout_type_personalized_fighter_road_layout_id(
   req: Request<{}, {}, {}, MVSQueries.Layout_dokken_layout_type_personalized_fighter_road_layout_id_QUERY>,
-  res: Response,
+  res: Response
 ) {
   res.send({
     slug: "fighter-road-layout",
@@ -73758,7 +73676,7 @@ export async function handleLayout_dokken_layout_type_personalized_fighter_road_
 
 export async function handleLayout_dokken_layout_type_personalized_fighter_variant_id(
   req: Request<{}, {}, {}, MVSQueries.Layout_dokken_layout_type_personalized_fighter_variant_id_QUERY>,
-  res: Response,
+  res: Response
 ) {
   res.send({
     slug: "fighter-layout",
@@ -80754,7 +80672,7 @@ export async function handleLayout_dokken_layout_type_personalized_fighter_varia
 
 export async function handleLayout_dokken_layout_type_personalized_main_variant_id(
   req: Request<{}, {}, {}, MVSQueries.Layout_dokken_layout_type_personalized_main_variant_id_QUERY>,
-  res: Response,
+  res: Response
 ) {
   res.send({
     slug: "main-variant-1",
@@ -81949,10 +81867,7 @@ export async function handleLayout_dokken_layout_type_personalized_main_variant_
                             type_options: { text: { localizations: { "store_product-umbrella-account-cosmetics-store-description": "" } } },
                             offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
                             data: {
-                              Value: [
-                                { localizations: { "rare-taunt-emote": "Rare Taunt Emote" } },
-                                { localizations: { "gremlins-": "Gremlins™" } },
-                              ],
+                              Value: [{ localizations: { "rare-taunt-emote": "Rare Taunt Emote" } }, { localizations: { "gremlins-": "Gremlins™" } }],
                             },
                           },
                           {
@@ -92917,10 +92832,7 @@ export async function handleLayout_dokken_layout_type_personalized_main_variant_
                             type_options: { text: { localizations: { "store_product-umbrella-account-cosmetics-store-description": "" } } },
                             offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
                             data: {
-                              Value: [
-                                { localizations: { "rare-taunt-emote": "Rare Taunt Emote" } },
-                                { localizations: { "gremlins-": "Gremlins™" } },
-                              ],
+                              Value: [{ localizations: { "rare-taunt-emote": "Rare Taunt Emote" } }, { localizations: { "gremlins-": "Gremlins™" } }],
                             },
                           },
                           {
@@ -96367,7 +96279,7 @@ export async function handleLayout_dokken_layout_type_personalized_main_variant_
 
 export async function handleLayout_dokken_layout_type_personalized_prestige_variant_id(
   req: Request<{}, {}, {}, MVSQueries.Layout_dokken_layout_type_personalized_prestige_variant_id_QUERY>,
-  res: Response,
+  res: Response
 ) {
   res.send({
     slug: "prestige-layout",
@@ -100418,7 +100330,7 @@ export async function handleLayout_dokken_layout_type_personalized_prestige_vari
 
 export async function handleLayout_dokken_layout_type_personalized_rift_variant_id(
   req: Request<{}, {}, {}, MVSQueries.Layout_dokken_layout_type_personalized_rift_variant_id_QUERY>,
-  res: Response,
+  res: Response
 ) {
   res.send({
     slug: "rift-layout",
@@ -121409,7 +121321,7 @@ export async function handleLayout_dokken_layout_type_personalized_rift_variant_
 
 export async function handleLayout_dokken_layout_type_personalized_skin_variant_id(
   req: Request<{}, {}, {}, MVSQueries.Layout_dokken_layout_type_personalized_skin_variant_id_QUERY>,
-  res: Response,
+  res: Response
 ) {
   res.send({
     slug: "skin-layout",
@@ -125193,9 +125105,7 @@ export async function handleLayout_dokken_layout_type_personalized_skin_variant_
                       type: "text",
                       type_options: { text: { localizations: { "store_product-president-morty-skin-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
-                      data: {
-                        Value: [{ localizations: { "epic-skin": "Epic Skin" } }, { localizations: { "rick-and-morty-": "Rick and Morty™" } }],
-                      },
+                      data: { Value: [{ localizations: { "epic-skin": "Epic Skin" } }, { localizations: { "rick-and-morty-": "Rick and Morty™" } }] },
                     },
                     {
                       name: "AdditionalVisualData",
@@ -125316,9 +125226,7 @@ export async function handleLayout_dokken_layout_type_personalized_skin_variant_
                       type: "text",
                       type_options: { text: { localizations: { "store_product-ex-icon-agent-morty-skin-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
-                      data: {
-                        Value: [{ localizations: { "epic-skin": "Epic Skin" } }, { localizations: { "rick-and-morty-": "Rick and Morty™" } }],
-                      },
+                      data: { Value: [{ localizations: { "epic-skin": "Epic Skin" } }, { localizations: { "rick-and-morty-": "Rick and Morty™" } }] },
                     },
                     {
                       name: "AdditionalVisualData",
@@ -125436,9 +125344,7 @@ export async function handleLayout_dokken_layout_type_personalized_skin_variant_
                       type: "text",
                       type_options: { text: { localizations: { "store_product-seal-team-rick-skin-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
-                      data: {
-                        Value: [{ localizations: { "epic-skin": "Epic Skin" } }, { localizations: { "rick-and-morty-": "Rick and Morty™" } }],
-                      },
+                      data: { Value: [{ localizations: { "epic-skin": "Epic Skin" } }, { localizations: { "rick-and-morty-": "Rick and Morty™" } }] },
                     },
                     {
                       name: "AdditionalVisualData",
@@ -125559,9 +125465,7 @@ export async function handleLayout_dokken_layout_type_personalized_skin_variant_
                       type: "text",
                       type_options: { text: { localizations: { "store_product-icon-director-sanchez-skin-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
-                      data: {
-                        Value: [{ localizations: { "epic-skin": "Epic Skin" } }, { localizations: { "rick-and-morty-": "Rick and Morty™" } }],
-                      },
+                      data: { Value: [{ localizations: { "epic-skin": "Epic Skin" } }, { localizations: { "rick-and-morty-": "Rick and Morty™" } }] },
                     },
                     {
                       name: "AdditionalVisualData",
@@ -125679,9 +125583,7 @@ export async function handleLayout_dokken_layout_type_personalized_skin_variant_
                       type: "text",
                       type_options: { text: { localizations: { "store_product-jake-the-starchild-skin-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
-                      data: {
-                        Value: [{ localizations: { "epic-skin": "Epic Skin" } }, { localizations: { "adventure-time-": "Adventure Time™" } }],
-                      },
+                      data: { Value: [{ localizations: { "epic-skin": "Epic Skin" } }, { localizations: { "adventure-time-": "Adventure Time™" } }] },
                     },
                     {
                       name: "AdditionalVisualData",
@@ -125928,9 +125830,7 @@ export async function handleLayout_dokken_layout_type_personalized_skin_variant_
                       type: "text",
                       type_options: { text: { localizations: { "store_product-baseball-finn-skin-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
-                      data: {
-                        Value: [{ localizations: { "epic-skin": "Epic Skin" } }, { localizations: { "adventure-time-": "Adventure Time™" } }],
-                      },
+                      data: { Value: [{ localizations: { "epic-skin": "Epic Skin" } }, { localizations: { "adventure-time-": "Adventure Time™" } }] },
                     },
                     {
                       name: "AdditionalVisualData",
@@ -127420,9 +127320,7 @@ export async function handleLayout_dokken_layout_type_personalized_skin_variant_
                       type: "text",
                       type_options: { text: { localizations: { "store_product-frankenstein-iron-giant-skin-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
-                      data: {
-                        Value: [{ localizations: { "epic-skin": "Epic Skin" } }, { localizations: { "the-iron-giant-": "The Iron Giant™" } }],
-                      },
+                      data: { Value: [{ localizations: { "epic-skin": "Epic Skin" } }, { localizations: { "the-iron-giant-": "The Iron Giant™" } }] },
                     },
                     {
                       name: "AdditionalVisualData",
@@ -127908,10 +127806,7 @@ export async function handleLayout_dokken_layout_type_personalized_skin_variant_
                       type_options: { text: { localizations: { "store_product-astropup-reindog-skin-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
                       data: {
-                        Value: [
-                          { localizations: { "epic-skin": "Epic Skin" } },
-                          { localizations: { "player-first-games-": "Player First Games™" } },
-                        ],
+                        Value: [{ localizations: { "epic-skin": "Epic Skin" } }, { localizations: { "player-first-games-": "Player First Games™" } }],
                       },
                     },
                     {
@@ -128034,10 +127929,7 @@ export async function handleLayout_dokken_layout_type_personalized_skin_variant_
                       type_options: { text: { localizations: { "store_product-battle-reindog-skin-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
                       data: {
-                        Value: [
-                          { localizations: { "epic-skin": "Epic Skin" } },
-                          { localizations: { "player-first-games-": "Player First Games™" } },
-                        ],
+                        Value: [{ localizations: { "epic-skin": "Epic Skin" } }, { localizations: { "player-first-games-": "Player First Games™" } }],
                       },
                     },
                     {
@@ -128161,10 +128053,7 @@ export async function handleLayout_dokken_layout_type_personalized_skin_variant_
                       type_options: { text: { localizations: { "store_product-golden-reindog-skin-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
                       data: {
-                        Value: [
-                          { localizations: { "epic-skin": "Epic Skin" } },
-                          { localizations: { "player-first-games-": "Player First Games™" } },
-                        ],
+                        Value: [{ localizations: { "epic-skin": "Epic Skin" } }, { localizations: { "player-first-games-": "Player First Games™" } }],
                       },
                     },
                     {
@@ -128289,10 +128178,7 @@ export async function handleLayout_dokken_layout_type_personalized_skin_variant_
                       type_options: { text: { localizations: { "store_product-mummy-reindog-skin-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
                       data: {
-                        Value: [
-                          { localizations: { "epic-skin": "Epic Skin" } },
-                          { localizations: { "player-first-games-": "Player First Games™" } },
-                        ],
+                        Value: [{ localizations: { "epic-skin": "Epic Skin" } }, { localizations: { "player-first-games-": "Player First Games™" } }],
                       },
                     },
                     {
@@ -128418,10 +128304,7 @@ export async function handleLayout_dokken_layout_type_personalized_skin_variant_
                       type_options: { text: { localizations: { "store_product-tea-time-reindog-skin-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
                       data: {
-                        Value: [
-                          { localizations: { "epic-skin": "Epic Skin" } },
-                          { localizations: { "player-first-games-": "Player First Games™" } },
-                        ],
+                        Value: [{ localizations: { "epic-skin": "Epic Skin" } }, { localizations: { "player-first-games-": "Player First Games™" } }],
                       },
                     },
                     {
@@ -132809,9 +132692,7 @@ export async function handleLayout_dokken_layout_type_personalized_skin_variant_
                       type: "text",
                       type_options: { text: { localizations: { "store_product-ugly-sweater-jake-skin-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
-                      data: {
-                        Value: [{ localizations: { "rare-skin": "Rare Skin" } }, { localizations: { "adventure-time-": "Adventure Time™" } }],
-                      },
+                      data: { Value: [{ localizations: { "rare-skin": "Rare Skin" } }, { localizations: { "adventure-time-": "Adventure Time™" } }] },
                     },
                     {
                       name: "AdditionalVisualData",
@@ -133056,9 +132937,7 @@ export async function handleLayout_dokken_layout_type_personalized_skin_variant_
                       type: "text",
                       type_options: { text: { localizations: { "store_product-ugly-sweater-finn-skin-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
-                      data: {
-                        Value: [{ localizations: { "rare-skin": "Rare Skin" } }, { localizations: { "adventure-time-": "Adventure Time™" } }],
-                      },
+                      data: { Value: [{ localizations: { "rare-skin": "Rare Skin" } }, { localizations: { "adventure-time-": "Adventure Time™" } }] },
                     },
                     {
                       name: "AdditionalVisualData",
@@ -133179,9 +133058,7 @@ export async function handleLayout_dokken_layout_type_personalized_skin_variant_
                       type: "text",
                       type_options: { text: { localizations: { "store_product-snow-suit-finn-skin-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
-                      data: {
-                        Value: [{ localizations: { "rare-skin": "Rare Skin" } }, { localizations: { "adventure-time-": "Adventure Time™" } }],
-                      },
+                      data: { Value: [{ localizations: { "rare-skin": "Rare Skin" } }, { localizations: { "adventure-time-": "Adventure Time™" } }] },
                     },
                     {
                       name: "AdditionalVisualData",
@@ -133301,9 +133178,7 @@ export async function handleLayout_dokken_layout_type_personalized_skin_variant_
                       type: "text",
                       type_options: { text: { localizations: { "store_product-dr-finn-skin-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
-                      data: {
-                        Value: [{ localizations: { "rare-skin": "Rare Skin" } }, { localizations: { "adventure-time-": "Adventure Time™" } }],
-                      },
+                      data: { Value: [{ localizations: { "rare-skin": "Rare Skin" } }, { localizations: { "adventure-time-": "Adventure Time™" } }] },
                     },
                     {
                       name: "AdditionalVisualData",
@@ -136777,9 +136652,7 @@ export async function handleLayout_dokken_layout_type_personalized_skin_variant_
                       type: "text",
                       type_options: { text: { localizations: { "store_product-beach-giant-skin-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
-                      data: {
-                        Value: [{ localizations: { "rare-skin": "Rare Skin" } }, { localizations: { "the-iron-giant-": "The Iron Giant™" } }],
-                      },
+                      data: { Value: [{ localizations: { "rare-skin": "Rare Skin" } }, { localizations: { "the-iron-giant-": "The Iron Giant™" } }] },
                     },
                     {
                       name: "AdditionalVisualData",
@@ -137395,10 +137268,7 @@ export async function handleLayout_dokken_layout_type_personalized_skin_variant_
                       type_options: { text: { localizations: { "store_product-chef-reindog-skin-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
                       data: {
-                        Value: [
-                          { localizations: { "rare-skin": "Rare Skin" } },
-                          { localizations: { "player-first-games-": "Player First Games™" } },
-                        ],
+                        Value: [{ localizations: { "rare-skin": "Rare Skin" } }, { localizations: { "player-first-games-": "Player First Games™" } }],
                       },
                     },
                     {
@@ -137521,10 +137391,7 @@ export async function handleLayout_dokken_layout_type_personalized_skin_variant_
                       type_options: { text: { localizations: { "store_product-guardian-reindog-skin-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
                       data: {
-                        Value: [
-                          { localizations: { "rare-skin": "Rare Skin" } },
-                          { localizations: { "player-first-games-": "Player First Games™" } },
-                        ],
+                        Value: [{ localizations: { "rare-skin": "Rare Skin" } }, { localizations: { "player-first-games-": "Player First Games™" } }],
                       },
                     },
                     {
@@ -137652,10 +137519,7 @@ export async function handleLayout_dokken_layout_type_personalized_skin_variant_
                       type_options: { text: { localizations: { "store_product-holiday-reindog-skin-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
                       data: {
-                        Value: [
-                          { localizations: { "rare-skin": "Rare Skin" } },
-                          { localizations: { "player-first-games-": "Player First Games™" } },
-                        ],
+                        Value: [{ localizations: { "rare-skin": "Rare Skin" } }, { localizations: { "player-first-games-": "Player First Games™" } }],
                       },
                     },
                     {
@@ -137779,10 +137643,7 @@ export async function handleLayout_dokken_layout_type_personalized_skin_variant_
                       type_options: { text: { localizations: { "store_product-megalodog-reindog-skin-store-description": "" } } },
                       offset: { x: { _hydra_double: 0 }, y: { _hydra_double: 0 } },
                       data: {
-                        Value: [
-                          { localizations: { "rare-skin": "Rare Skin" } },
-                          { localizations: { "player-first-games-": "Player First Games™" } },
-                        ],
+                        Value: [{ localizations: { "rare-skin": "Rare Skin" } }, { localizations: { "player-first-games-": "Player First Games™" } }],
                       },
                     },
                     {
